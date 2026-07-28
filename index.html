@@ -187,19 +187,100 @@
     backdrop-filter:blur(6px);border:1px solid var(--border);
   }
 
-  /* certificates */
-  .cert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem;}
-  .cert-card{
-    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-    padding:1.8rem;display:flex;gap:1.1rem;align-items:flex-start;transition:all .3s ease;
+ /* ---------- CERTIFICATES: Recognition & Continuous Learning ---------- */
+  .recognition-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;margin-bottom:4rem;
   }
-  .cert-card:hover{border-color:rgba(0,212,255,0.35);transform:translateY(-4px);}
-  .cert-icon{
-    width:48px;height:48px;border-radius:12px;flex-shrink:0;
-    background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+  .recognition-card{
+    position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;cursor:pointer;transition:transform .4s cubic-bezier(.2,.7,.2,1), border-color .4s ease, box-shadow .4s ease;
   }
-  .cert-card h4{font-size:1rem;font-weight:600;margin-bottom:0.3rem;}
-  .cert-card p{color:var(--text-dim);font-size:0.85rem;}
+  .recognition-card:hover{
+    transform:translateY(-8px);border-color:rgba(0,212,255,0.4);
+    box-shadow:0 25px 50px rgba(0,0,0,0.35);
+  }
+  .recognition-preview{
+    aspect-ratio:16/10;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,rgba(0,212,255,0.12),rgba(123,44,191,0.18));
+  }
+  .recognition-preview img{
+    width:100%;height:100%;object-fit:cover;transition:transform .6s ease;
+  }
+  .recognition-card:hover .recognition-preview img{transform:scale(1.08);}
+  .recognition-preview .ph-fill{
+    width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+    color:var(--text-dim);font-size:0.85rem;
+  }
+  .recognition-view{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:0.5rem;
+    background:linear-gradient(0deg,rgba(8,8,15,0.75),rgba(8,8,15,0.3));
+    opacity:0;transition:opacity .35s ease;color:#fff;font-weight:600;font-size:0.9rem;
+  }
+  .recognition-card:hover .recognition-view{opacity:1;}
+  .recognition-view i{color:var(--blue);}
+  .recognition-body{padding:1.4rem 1.6rem 1.6rem;}
+  .recognition-body h4{font-size:1.05rem;font-weight:600;margin-bottom:0.35rem;}
+  .recognition-body .rec-sub{color:var(--text-dim);font-size:0.85rem;margin-bottom:0.9rem;}
+  .recognition-year{
+    display:inline-flex;align-items:center;gap:0.4rem;font-size:0.78rem;font-weight:600;
+    padding:0.35rem 0.8rem;border-radius:50px;background:rgba(255,255,255,0.05);
+    border:1px solid var(--border);color:var(--blue);
+  }
+
+  /* Continuous Learning */
+  .learning-label{color:var(--blue);font-weight:600;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem;}
+  .learning-title{font-size:1.3rem;font-weight:700;margin-bottom:1.6rem;}
+  .learning-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;}
+  .learning-badge{
+    display:flex;align-items:center;gap:0.9rem;padding:1.2rem 1.4rem;border-radius:14px;
+    background:var(--surface);border:1px solid var(--border);transition:all .3s ease;
+  }
+  .learning-badge:hover{border-color:rgba(123,44,191,0.4);transform:translateY(-3px);background:var(--surface-strong);}
+  .learning-badge i{
+    width:38px;height:38px;border-radius:10px;flex-shrink:0;background:var(--gradient);
+    display:flex;align-items:center;justify-content:center;font-size:0.95rem;color:#fff;
+  }
+  .learning-badge span{font-size:0.9rem;font-weight:500;color:var(--text-dim);}
+
+  @media(max-width:960px){
+    .recognition-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:640px){
+    .recognition-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- CERTIFICATE MODAL ---------- */
+  .cert-modal{
+    position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;
+    padding:4vh 4vw;
+  }
+  .cert-modal.open{display:flex;}
+  .cert-modal-backdrop{
+    position:absolute;inset:0;background:rgba(8,8,15,0.75);backdrop-filter:blur(0px);
+    opacity:0;transition:opacity .35s ease-in-out, backdrop-filter .35s ease-in-out;
+  }
+  .cert-modal.open .cert-modal-backdrop{opacity:1;backdrop-filter:blur(14px);}
+  .cert-modal-inner{
+    position:relative;max-width:90vw;max-height:85vh;
+    background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:20px;
+    padding:1.2rem;backdrop-filter:blur(20px);
+    opacity:0;transform:scale(0.92);
+    transition:opacity .35s cubic-bezier(.2,.7,.2,1), transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .cert-modal.open .cert-modal-inner{opacity:1;transform:scale(1);}
+  .cert-modal-inner img{
+    max-width:86vw;max-height:78vh;width:auto;height:auto;border-radius:12px;object-fit:contain;display:block;
+  }
+  .cert-modal-close{
+    position:absolute;top:-18px;right:-18px;width:42px;height:42px;border-radius:50%;
+    background:var(--gradient);color:#fff;border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-size:1.05rem;
+    box-shadow:0 10px 25px rgba(0,212,255,0.35);transition:transform .3s ease;
+  }
+  .cert-modal-close:hover{transform:scale(1.1) rotate(90deg);}
+  @media(max-width:640px){
+    .cert-modal-close{top:-14px;right:0;}
+  }
 
   /* contact */
   .contact-box{
@@ -374,10 +455,10 @@
           <div class="placeholder" style="display:none;">DK Catering mockup</div>
         </div>
         <div class="project-body">
-          <h3>DK Catering Website</h3>
+          <h3>COMING SOON</h3>
           <p>A clean ordering website for a catering business, built to make browsing menus and placing orders effortless.</p>
           <div class="project-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
-          <a href="projects/dk-catering.html" class="project-link">View Case Study <i class="fa-solid fa-arrow-right"></i></a>
+          <a href="index.html#projects" class="project-link">View Case Study <i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </div>
 
@@ -404,23 +485,84 @@
 <section id="certificates" class="section">
   <div class="section-inner">
     <div class="section-tag">Certificates & Achievements</div>
-    <h2 class="section-title">Recognition along the way</h2>
-    <div class="cert-grid">
-      <div class="cert-card" data-reveal>
-        <div class="cert-icon"><i class="fa-solid fa-trophy"></i></div>
-        <div><h4>Business Plan Competition</h4><p>Semi Finalist</p></div>
+    <h2 class="section-title">Recognition & Continuous Learning</h2>
+    <p class="section-desc">Moments of recognition alongside the courses and events I keep showing up for.</p>
+
+    <!-- Recognition -->
+    <div class="recognition-grid">
+
+      <div class="recognition-card" data-reveal
+           data-cert-img="assets/certificates/semifinal.png"
+           data-cert-title="Business Plan Competition">
+        <div class="recognition-preview">
+          <img src="assets/certificates/semifinal.png" alt="Business Plan Competition certificate"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="ph-fill" style="display:none;"><i class="fa-solid fa-image"></i>&nbsp; Certificate preview</div>
+          <div class="recognition-view"><i class="fa-solid fa-expand"></i> View Certificate</div>
+        </div>
+        <div class="recognition-body">
+          <h4>Business Plan Competition</h4>
+          <p class="rec-sub">Semi Finalist</p>
+          <span class="recognition-year"><i class="fa-regular fa-calendar"></i> 2025</span>
+        </div>
       </div>
-      <div class="cert-card" data-reveal>
-        <div class="cert-icon"><i class="fa-solid fa-lightbulb"></i></div>
-        <div><h4>IMPACT 2025</h4><p>Business Plan Participant</p></div>
+
+      <div class="recognition-card" data-reveal
+           data-cert-img="assets/certificates/memo.jpg"
+           data-cert-title="Ratu Film Festival">
+        <div class="recognition-preview">
+          <img src="assets/certificates/memo.jpg" alt="Ratu Film Festival certificate"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="ph-fill" style="display:none;"><i class="fa-solid fa-image"></i>&nbsp; Certificate preview</div>
+          <div class="recognition-view"><i class="fa-solid fa-expand"></i> View Certificate</div>
+        </div>
+        <div class="recognition-body">
+          <h4>Ratu Film Festival</h4>
+          <p class="rec-sub">Film Festival Participant</p>
+          <span class="recognition-year"><i class="fa-regular fa-calendar"></i> 2025</span>
+        </div>
       </div>
-      <div class="cert-card" data-reveal>
-        <div class="cert-icon"><i class="fa-solid fa-film"></i></div>
-        <div><h4>Ratu Film Festival</h4><p>Film Festival Participant</p></div>
+
+      <div class="recognition-card" data-reveal
+           data-cert-img="assets/certificates/impact.png"
+           data-cert-title="IMPACT 2025">
+        <div class="recognition-preview">
+          <img src="assets/certificates/impact.png" alt="IMPACT 2025 certificate"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="ph-fill" style="display:none;"><i class="fa-solid fa-image"></i>&nbsp; Certificate preview</div>
+          <div class="recognition-view"><i class="fa-solid fa-expand"></i> View Certificate</div>
+        </div>
+        <div class="recognition-body">
+          <h4>IMPACT 2025</h4>
+          <p class="rec-sub">Business Plan Participant</p>
+          <span class="recognition-year"><i class="fa-regular fa-calendar"></i> 2025</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Continuous Learning -->
+    <div data-reveal>
+      <div class="learning-label">Continuous Learning</div>
+      <h3 class="learning-title">Always picking up something new</h3>
+      <div class="learning-grid">
+        <div class="learning-badge"><i class="fa-solid fa-robot"></i><span>Smart Android with AI</span></div>
+        <div class="learning-badge"><i class="fa-solid fa-bullhorn"></i><span>Digital Marketing Seminar</span></div>
+        <div class="learning-badge"><i class="fa-solid fa-basketball"></i><span>The Unseen Court 3x3 Basketball</span></div>
       </div>
     </div>
+
   </div>
 </section>
+
+<!-- CERTIFICATE MODAL -->
+<div class="cert-modal" id="certModal">
+  <div class="cert-modal-backdrop" id="certModalBackdrop"></div>
+  <div class="cert-modal-inner">
+    <button class="cert-modal-close" id="certModalClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <img id="certModalImage" src="" alt="Certificate preview">
+  </div>
+</div>
 
 <!-- CONTACT -->
 <section id="contact" class="section">
@@ -429,10 +571,26 @@
       <h2>Let's build something together</h2>
       <p>Open to Frontend, Mobile Developer, and UI/UX Designer roles and collaborations.</p>
       <div class="contact-links">
-        <a href="mailto:fallskie25@email.com" class="contact-pill"><i class="fa-solid fa-envelope"></i> Email</a>
-        <a href="https://linkedin.com/in/melvinandrea" class="contact-pill"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-        <a href="https://github.com/melvinandrea" class="contact-pill"><i class="fa-brands fa-github"></i> GitHub</a>
-        <a href="assets/Melvin-Andrea-Portfolio.pdf" class="contact-pill"><i class="fa-solid fa-file-pdf"></i> Portfolio PDF</a>
+        <a href="https://wa.me/6282231258463" target="_blank" rel="noopener noreferrer" class="contact-pill">
+  <i class="fa-brands fa-whatsapp"></i> WhatsApp
+</a>
+
+
+
+
+
+        <!-- <a href="https://github.com/MelvinnS"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="contact-pill"> -->
+
+
+        <a href="https://www.linkedin.com/in/melvin-andrea-ismiananta-a17186373 " target ="_blank" class="contact-pill"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+        <a href="https://github.com/MelvinnS" target="_blank" class="contact-pill"><i class="fa-brands fa-github"></i> GitHub</a>
+       
+       
+       
+        <a href="#" class="contact-pill"><i class="fa-solid fa-file-pdf"></i> Portfolio PDF</a>
       </div>
     </div>
   </div>
@@ -451,6 +609,37 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
   }, { threshold: 0.15 });
   revealEls.forEach(el => io.observe(el));
+
+
+
+  // Certificate modal (Recognition cards)
+  const certModal = document.getElementById('certModal');
+  const certModalImage = document.getElementById('certModalImage');
+  const certModalClose = document.getElementById('certModalClose');
+  const certModalBackdrop = document.getElementById('certModalBackdrop');
+
+  function openCertModal(imgSrc, title){
+    certModalImage.src = imgSrc;
+    certModalImage.alt = title;
+    certModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCertModal(){
+    certModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.recognition-card').forEach(card => {
+    card.addEventListener('click', () => {
+      openCertModal(card.getAttribute('data-cert-img'), card.getAttribute('data-cert-title'));
+    });
+  });
+
+  certModalClose.addEventListener('click', closeCertModal);
+  certModalBackdrop.addEventListener('click', closeCertModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && certModal.classList.contains('open')) closeCertModal();
+  });
 </script>
 </body>
 </html>
